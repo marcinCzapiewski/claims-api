@@ -1,13 +1,10 @@
-﻿namespace Claims.Auditing
+﻿namespace Auditing.Infrastructure.Dtos
 {
-    public class CoverAudit
+    public class CoverAuditDto
     {
         public int Id { get; set; }
-
         public string? CoverId { get; set; }
-
         public DateTime Created { get; set; }
-
         public string? HttpRequestType { get; set; }
     }
 }

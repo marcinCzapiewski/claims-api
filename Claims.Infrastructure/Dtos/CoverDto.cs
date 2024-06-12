@@ -1,8 +1,7 @@
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Claims;
-
-public class Cover
+namespace Claims.Infrastructure.Dtos;
+public class CoverDto
 {
     [BsonId]
     public string Id { get; set; }
