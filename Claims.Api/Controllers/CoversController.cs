@@ -1,60 +1,79 @@
+using Claims.Api.Contracts.Requests;
+using Claims.Application;
+using Claims.Application.Commands;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CoversController : ControllerBase
+public class CoversController(ILogger<CoversController> logger, ICoversService coversService) : ControllerBase
 {
-    private readonly ICoversService _claimsContext;
-    private readonly ILogger<CoversController> _logger;
-
-    public CoversController(ILogger<CoversController> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ICoversService _coversService = coversService;
+    private readonly ILogger<CoversController> _logger = logger;
 
     [HttpPost("compute")]
-    public async Task<ActionResult> ComputePremiumAsync(DateTime startDate, DateTime endDate, CoverType coverType)
+    public ActionResult ComputePremium(DateTime startDate, DateTime endDate, Api.Contracts.CoverType coverType)
     {
-        return Ok(ComputePremium(startDate, endDate, coverType));
+        var calculatedPremium = Domain.Entities.Cover.ComputePremium(startDate, endDate, (Domain.Entities.CoverType)coverType);
+
+        return Ok(calculatedPremium);
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Cover>>> GetAsync()
+    public async Task<ActionResult<IEnumerable<Api.Contracts.Cover>>> GetAsync()
     {
-        var results = await _claimsContext.Covers.ToListAsync();
+        var results = (await _coversService
+            .GetAllCovers())
+            .Select(x => new Api.Contracts.Cover
+            {
+                Id = x.Id,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                Premium = x.Premium,
+                Type = (Api.Contracts.CoverType)x.Type
+            });
+
         return Ok(results);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Cover>> GetAsync(string id)
+    public async Task<ActionResult<Api.Contracts.Cover>> GetAsync(string id)
     {
-        var results = await _claimsContext.Covers.ToListAsync();
-        return Ok(results.SingleOrDefault(cover => cover.Id == id));
+        var cover = await _coversService.GetCover(id);
+
+        if (cover == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(new Api.Contracts.Cover
+        {
+            Id = cover.Id,
+            StartDate = cover.StartDate,
+            EndDate = cover.EndDate,
+            Premium = cover.Premium,
+            Type = (Api.Contracts.CoverType)cover.Type
+        });
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateAsync(Cover cover)
+    public async Task<ActionResult> CreateAsync(CreateCoverRequest request)
     {
-        cover.Id = Guid.NewGuid().ToString();
-        cover.Premium = ComputePremium(cover.StartDate, cover.EndDate, cover.Type);
-        _claimsContext.Covers.Add(cover);
-        await _claimsContext.SaveChangesAsync();
-        _auditer.AuditCover(cover.Id, "POST");
+        var cover = await _coversService.CreateCover(new CreateCoverCommand
+        {
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            Type = (Domain.Entities.CoverType)request.Type,
+            HttpRequestType = HttpContext.Request.Method
+        });
+
         return Ok(cover);
     }
 
     [HttpDelete("{id}")]
     public async Task DeleteAsync(string id)
     {
-        _auditer.AuditCover(id, "DELETE");
-        var cover = await _claimsContext.Covers.Where(cover => cover.Id == id).SingleOrDefaultAsync();
-        if (cover is not null)
-        {
-            _claimsContext.Covers.Remove(cover);
-            await _claimsContext.SaveChangesAsync();
-        }
+        await _coversService.DeleteCover(new DeleteCoverCommand { CoverId = id, HttpRequestType = HttpContext.Request.Method });
     }
 }

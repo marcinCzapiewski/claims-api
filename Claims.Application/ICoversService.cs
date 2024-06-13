@@ -1,7 +1,11 @@
-﻿using Claims.Domain.Models;
+﻿using Claims.Application.Commands;
+using Claims.Domain.Entities;
 
 namespace Claims.Application;
 public interface ICoversService
 {
-    decimal ComputePremium(DateTime startDate, DateTime endDate, CoverType coverType);
+    Task<Cover> CreateCover(CreateCoverCommand command);
+    Task<IReadOnlyCollection<Cover>> GetAllCovers();
+    Task<Cover?> GetCover(string id);
+    Task DeleteCover(DeleteCoverCommand command);
 }

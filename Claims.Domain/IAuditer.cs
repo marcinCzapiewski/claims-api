@@ -1,4 +1,4 @@
-﻿namespace Auditing.Application;
+﻿namespace Claims.Domain;
 public interface IAuditer
 {
     public void AuditClaim(string id, string httpRequestType);

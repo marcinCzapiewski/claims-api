@@ -1,39 +1,40 @@
-﻿using Claims.Domain.Models;
+﻿using Claims.Application.Commands;
+using Claims.Domain;
+using Claims.Domain.Entities;
 
 namespace Claims.Application;
-internal class CoversService : ICoversService
+internal class CoversService(ICoversRepository coversRepository, IAuditer auditer) : ICoversService
 {
-    public decimal ComputePremium(DateTime startDate, DateTime endDate, CoverType coverType)
+    private readonly ICoversRepository _coversRepository = coversRepository;
+    private readonly IAuditer _audider = auditer;
+
+    public async Task<Cover> CreateCover(CreateCoverCommand command)
     {
-        var multiplier = 1.3m;
-        if (coverType == CoverType.Yacht)
-        {
-            multiplier = 1.1m;
-        }
+        // TODO validation and error handling
+        var cover = Cover.New(command.StartDate, command.EndDate, command.Type);
 
-        if (coverType == CoverType.PassengerShip)
-        {
-            multiplier = 1.2m;
-        }
+        // NOTE: create and audit should be transactional
+        await _coversRepository.CreateCover(cover);
 
-        if (coverType == CoverType.Tanker)
-        {
-            multiplier = 1.5m;
-        }
+        _audider.AuditCover(cover.Id.ToString(), command.HttpRequestType);
 
-        var premiumPerDay = 1250 * multiplier;
-        var insuranceLength = (endDate - startDate).TotalDays;
-        var totalPremium = 0m;
+        return cover;
+    }
 
-        for (var i = 0; i < insuranceLength; i++)
-        {
-            if (i < 30) totalPremium += premiumPerDay;
-            if (i < 180 && coverType == CoverType.Yacht) totalPremium += premiumPerDay - premiumPerDay * 0.05m;
-            else if (i < 180) totalPremium += premiumPerDay - premiumPerDay * 0.02m;
-            if (i < 365 && coverType != CoverType.Yacht) totalPremium += premiumPerDay - premiumPerDay * 0.03m;
-            else if (i < 365) totalPremium += premiumPerDay - premiumPerDay * 0.08m;
-        }
+    public Task<IReadOnlyCollection<Cover>> GetAllCovers()
+    {
+        return _coversRepository.GetAllCovers();
+    }
 
-        return totalPremium;
+    public Task<Cover?> GetCover(string id)
+    {
+        return _coversRepository.GetCover(id);
+    }
+
+    public async Task DeleteCover(DeleteCoverCommand command)
+    {
+        // NOTE: delete and audit should be transactional
+        await _coversRepository.DeleteCover(command.CoverId);
+        _audider.AuditCover(command.CoverId, command.HttpRequestType);
     }
 }

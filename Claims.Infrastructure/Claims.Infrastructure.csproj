@@ -15,4 +15,8 @@
     <PackageReference Include="MongoDB.EntityFrameworkCore" Version="8.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Auditing.Application\Auditing.Application.csproj" />
+  </ItemGroup>
+
 </Project>

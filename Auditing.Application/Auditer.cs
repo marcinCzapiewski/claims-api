@@ -1,5 +1,6 @@
 ﻿using Auditing.Infrastructure;
 using Auditing.Infrastructure.Dtos;
+using Claims.Domain;
 
 namespace Auditing.Application;
 
