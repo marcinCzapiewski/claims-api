@@ -1,4 +1,6 @@
-﻿namespace Claims.Domain.Entities;
+﻿using Claims.Domain.Covers;
+
+namespace Claims.Domain.Entities;
 public class Claim
 {
     public string Id { get; set; }

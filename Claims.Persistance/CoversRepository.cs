@@ -1,5 +1,5 @@
 ﻿using Claims.Domain;
-using Claims.Domain.Entities;
+using Claims.Domain.Covers;
 using Claims.Infrastructure.Dtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,7 +39,7 @@ internal class CoversRepository(ClaimsContext claimsContext) : ICoversRepository
             Guid.Parse(coverDto.Id),
             coverDto.StartDate,
             coverDto.EndDate,
-            (Domain.Entities.CoverType)coverDto.Type,
+            (Domain.Covers.CoverType)coverDto.Type,
             coverDto.Premium);
     }
 
@@ -47,7 +47,7 @@ internal class CoversRepository(ClaimsContext claimsContext) : ICoversRepository
     {
         return (await _context.Covers
             .AsNoTracking()
-            .Select(x => Cover.LoadFromDatabase(Guid.Parse(x.Id), x.StartDate, x.EndDate, (Domain.Entities.CoverType)x.Type, x.Premium))
+            .Select(x => Cover.LoadFromDatabase(Guid.Parse(x.Id), x.StartDate, x.EndDate, (Domain.Covers.CoverType)x.Type, x.Premium))
             .ToListAsync())
             .AsReadOnly();
     }

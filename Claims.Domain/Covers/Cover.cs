@@ -1,16 +1,15 @@
-﻿namespace Claims.Domain.Entities;
+﻿namespace Claims.Domain.Covers;
 
 public class Cover
 {
-    public Guid Id { get; }
+    public Guid Id { get; private set; }
 
-    public DateTime StartDate { get; }
+    public DateTime StartDate { get; private set; }
+    public DateTime EndDate { get; private set; }
 
-    public DateTime EndDate { get; }
+    public CoverType Type { get; private set; }
 
-    public CoverType Type { get; }
-
-    public decimal Premium { get; }
+    public decimal Premium { get; private set; }
 
     private Cover(Guid id, DateTime startDate, DateTime endDate, CoverType type, decimal premium)
     {

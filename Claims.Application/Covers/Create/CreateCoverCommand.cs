@@ -1,7 +1,8 @@
-﻿using Claims.Domain.Entities;
+﻿using Claims.Domain.Covers;
+using MediatR;
 
-namespace Claims.Application.Commands;
-public record CreateCoverCommand
+namespace Claims.Application.Covers.Create;
+public sealed record CreateCoverCommand : IRequest<Cover>
 {
     public DateTime StartDate { get; init; }
     public DateTime EndDate { get; init; }

@@ -1,4 +1,4 @@
-﻿namespace Claims.Domain.Entities;
+﻿namespace Claims.Domain.Covers;
 
 public enum CoverType
 {

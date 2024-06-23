@@ -1,4 +1,4 @@
-﻿namespace Auditing.Infrastructure.Dtos
+﻿namespace Auditing.Persistance.Dtos
 {
     public class CoverAuditDto
     {

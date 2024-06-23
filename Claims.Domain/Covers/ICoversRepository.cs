@@ -1,4 +1,4 @@
-﻿using Claims.Domain.Entities;
+﻿using Claims.Domain.Covers;
 
 namespace Claims.Domain;
 public interface ICoversRepository

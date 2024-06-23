@@ -1,7 +1,7 @@
-﻿using Auditing.Infrastructure.Dtos;
+﻿using Auditing.Persistance.Dtos;
 using Microsoft.EntityFrameworkCore;
 
-namespace Auditing.Infrastructure
+namespace Auditing.Persistance
 {
     public class AuditContext : DbContext
     {

@@ -1,11 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR.NotificationPublishers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Claims.Application;
 public static class DiExtensions
 {
-    public static IServiceCollection RegisterApplicationLayer(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddTransient<ICoversService, CoversService>();
+        services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssemblyContaining<ApplicationAssemblyReference>();
+
+            config.NotificationPublisher = new TaskWhenAllPublisher();
+        });
 
         return services;
     }

@@ -1,4 +1,4 @@
-﻿using Auditing.Infrastructure;
+﻿using Auditing.Persistance;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
