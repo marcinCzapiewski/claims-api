@@ -3,15 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace Claims.Infrastructure;
-internal class ClaimsContext : DbContext
+internal class ClaimsContext(DbContextOptions options) : DbContext(options)
 {
-    private DbSet<ClaimDto> Claims { get; init; }
+    public DbSet<ClaimDto> Claims { get; init; }
     public DbSet<CoverDto> Covers { get; init; }
-
-    public ClaimsContext(DbContextOptions options)
-        : base(options)
-    {
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

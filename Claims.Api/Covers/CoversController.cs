@@ -1,4 +1,5 @@
 using Claims.Api.Contracts.Requests;
+using Claims.Api.Covers;
 using Claims.Application.Covers.Create;
 using Claims.Application.Covers.Delete;
 using Claims.Application.Covers.Get;
@@ -28,14 +29,7 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     {
         var results = await _sender.Send(new GetCoversQuery());
 
-        return Ok(results.Select(x => new Api.Contracts.Cover
-        {
-            Id = x.Id,
-            StartDate = x.StartDate,
-            EndDate = x.EndDate,
-            Premium = x.Premium,
-            Type = (Api.Contracts.CoverType)x.Type
-        }));
+        return Ok(results.ToCoverApiContracts());
     }
 
     [HttpGet("{id}")]
@@ -48,14 +42,7 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
             return NotFound();
         }
 
-        return Ok(new Api.Contracts.Cover
-        {
-            Id = cover.Id,
-            StartDate = cover.StartDate,
-            EndDate = cover.EndDate,
-            Premium = cover.Premium,
-            Type = (Api.Contracts.CoverType)cover.Type
-        });
+        return Ok(cover.ToCoverApiContract());
     }
 
     [HttpPost]
@@ -70,14 +57,7 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
         });
 
         var locationUri = Url.Link("covers", new { id = cover.Id });
-        return Created(locationUri, new Api.Contracts.Cover
-        {
-            Id = cover.Id,
-            StartDate = cover.StartDate,
-            EndDate = cover.EndDate,
-            Premium = cover.Premium,
-            Type = (Api.Contracts.CoverType)cover.Type
-        });
+        return Created(locationUri, cover.ToCoverApiContract());
     }
 
     [HttpDelete("{id}")]

@@ -8,7 +8,7 @@ internal class CoversRepository(ClaimsContext claimsContext) : ICoversRepository
 {
     private readonly ClaimsContext _context = claimsContext;
 
-    public async Task CreateCover(Cover cover)
+    public async Task AddCover(Cover cover)
     {
         var coverDto = new CoverDto
         {
@@ -36,7 +36,7 @@ internal class CoversRepository(ClaimsContext claimsContext) : ICoversRepository
         }
 
         return Cover.LoadFromDatabase(
-            Guid.Parse(coverDto.Id),
+            coverDto.Id,
             coverDto.StartDate,
             coverDto.EndDate,
             (Domain.Covers.CoverType)coverDto.Type,
@@ -47,14 +47,14 @@ internal class CoversRepository(ClaimsContext claimsContext) : ICoversRepository
     {
         return (await _context.Covers
             .AsNoTracking()
-            .Select(x => Cover.LoadFromDatabase(Guid.Parse(x.Id), x.StartDate, x.EndDate, (Domain.Covers.CoverType)x.Type, x.Premium))
+            .Select(x => Cover.LoadFromDatabase(x.Id, x.StartDate, x.EndDate, (Domain.Covers.CoverType)x.Type, x.Premium))
             .ToListAsync())
             .AsReadOnly();
     }
 
     public async Task DeleteCover(string coverId)
     {
-        var coverDto = await _context.Covers.Where(cover => cover.Id == coverId).SingleOrDefaultAsync();
+        var coverDto = await _context.Covers.FirstOrDefaultAsync(cover => cover.Id == coverId);
         if (coverDto is not null)
         {
             _context.Covers.Remove(coverDto);

@@ -2,4 +2,4 @@
 using MediatR;
 
 namespace Claims.Application.Covers.Get;
-public sealed record GetCoverQuery(string coverId) : IRequest<Cover?>;
+public sealed record GetCoverQuery(string CoverId) : IRequest<Cover?>;

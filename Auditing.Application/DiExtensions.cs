@@ -1,4 +1,5 @@
 ﻿using Auditing.Persistance;
+using Claims.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,10 +1,8 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-
-namespace Claims.Api.Contracts;
+﻿namespace Claims.Api.Contracts;
 
 public class Cover
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     public DateTime StartDate { get; set; }
 

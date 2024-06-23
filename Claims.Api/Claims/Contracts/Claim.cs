@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-
-namespace Claims.Api.Contracts;
+﻿namespace Claims.Api.Contracts;
 
 public class Claim
 {

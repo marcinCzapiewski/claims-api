@@ -7,8 +7,8 @@ internal sealed class GetCoverQueryHandler(ICoversRepository coversRepository) :
 {
     private readonly ICoversRepository _coversRepository = coversRepository;
 
-    public async Task<Cover?> Handle(GetCoverQuery request, CancellationToken cancellationToken)
+    public Task<Cover?> Handle(GetCoverQuery request, CancellationToken cancellationToken)
     {
-        return await _coversRepository.GetCover(request.coverId);
+        return _coversRepository.GetCover(request.CoverId);
     }
 }

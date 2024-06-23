@@ -1,4 +1,4 @@
-﻿namespace Claims.Domain.Entities;
+﻿namespace Claims.Domain.Claims;
 public enum ClaimType
 {
     Collision = 0,

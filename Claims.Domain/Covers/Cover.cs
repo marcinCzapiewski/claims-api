@@ -2,7 +2,7 @@
 
 public class Cover
 {
-    public Guid Id { get; private set; }
+    public string Id { get; private set; }
 
     public DateTime StartDate { get; private set; }
     public DateTime EndDate { get; private set; }
@@ -11,7 +11,7 @@ public class Cover
 
     public decimal Premium { get; private set; }
 
-    private Cover(Guid id, DateTime startDate, DateTime endDate, CoverType type, decimal premium)
+    private Cover(string id, DateTime startDate, DateTime endDate, CoverType type, decimal premium)
     {
         Id = id;
         StartDate = startDate;
@@ -22,10 +22,10 @@ public class Cover
 
     public static Cover New(DateTime startDate, DateTime endDate, CoverType type)
     {
-        return new Cover(Guid.NewGuid(), startDate, endDate, type, ComputePremium(startDate, endDate, type));
+        return new Cover(Guid.NewGuid().ToString(), startDate, endDate, type, ComputePremium(startDate, endDate, type));
     }
 
-    public static Cover LoadFromDatabase(Guid id, DateTime startDate, DateTime endDate, CoverType type, decimal premium)
+    public static Cover LoadFromDatabase(string id, DateTime startDate, DateTime endDate, CoverType type, decimal premium)
     {
         return new Cover(id, startDate, endDate, type, premium);
     }

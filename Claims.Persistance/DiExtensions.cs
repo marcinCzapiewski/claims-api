@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Claims.Domain;
+using Claims.Domain.Claims;
+using Claims.Persistance;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
@@ -16,6 +19,9 @@ public static class DiExtensions
                 options.UseMongoDB(database.Client, database.DatabaseNamespace.DatabaseName);
             }
         );
+
+        services.AddTransient<ICoversRepository, CoversRepository>();
+        services.AddTransient<IClaimsRepository, ClaimsRepository>();
 
         return services;
     }

@@ -13,8 +13,8 @@ internal sealed class CreateCoverCommandHandler(ICoversRepository coversReposito
         // TODO validation and error handling
         var cover = Cover.New(request.StartDate, request.EndDate, request.Type);
 
-        // NOTE: create and audit should be transactional
-        await _coversRepository.CreateCover(cover);
+        // NOTE: should create and audit be transactional?
+        await _coversRepository.AddCover(cover);
         _auditer.AuditCover(cover.Id.ToString(), request.HttpRequestType);
 
         return cover;
