@@ -8,7 +8,7 @@ public static class DiExtensions
 {
     public static IServiceCollection AddAuditing(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServer")));
         services.AddTransient<IAuditer, Auditer>();
 
         return services;
