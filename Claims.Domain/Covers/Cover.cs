@@ -26,17 +26,17 @@ public class Cover
     {
         if (startDate < DateTime.UtcNow)
         {
-            return Result.Failure<Cover>(new DomainError("Cover.Creating.StartDate", "Cover's start date cannot be in the past"));
+            return Result.Failure<Cover>(DomainErrors.Covers.StartDateInPast);
         }
 
         if (startDate > endDate)
         {
-            return Result.Failure<Cover>(new DomainError("Cover.Creating.StartDate", "Cover's start date cannot be later than end date"));
+            return Result.Failure<Cover>(DomainErrors.Covers.StartDateLaterThanEndDate);
         }
 
         if ((endDate - startDate).Days > 365)
         {
-            return Result.Failure<Cover>(new DomainError("Cover.Creating.InsurancePeriod", "Insurance period cannot exceed 1 year"));
+            return Result.Failure<Cover>(DomainErrors.Covers.InsurancePeriodTooLong);
         }
 
         return new Cover(Guid.NewGuid().ToString(), startDate, endDate, type, ComputePremium(startDate, endDate, type));

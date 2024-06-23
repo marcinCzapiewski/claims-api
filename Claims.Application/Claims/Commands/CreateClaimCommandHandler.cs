@@ -16,7 +16,7 @@ internal sealed class CreateClaimCommandHandler(ClaimsContext claimsContext, IAu
 
         if (relatedCover == null)
         {
-            return Result.Failure<Claim>(new DomainError(
+            return Result.Failure<Claim>(new Error(
                 "Claim.Creating.CoverId",
                 $"Cover with id: {request.CoverId} does not exist"));
         }

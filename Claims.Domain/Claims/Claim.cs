@@ -27,13 +27,13 @@ public class Claim
     {
         if (damageCost > MaximumDamageCost)
         {
-            return Result.Failure<Claim>(new DomainError("Claim.Creating.DamageCost", $"Claim damage cost cannot exceed maximum value of {MaximumDamageCost}"));
+            return Result.Failure<Claim>(DomainErrors.Claims.DamageCostTooHigh);
         }
 
         var now = DateTime.UtcNow;
         if (NowIsNotWithinRelatedCoverPeriod(cover, now))
         {
-            return Result.Failure<Claim>(new DomainError("Claim.Creating", $"Claim cannot be created outside related cover period."));
+            return Result.Failure<Claim>(DomainErrors.Claims.OutsideCoverPeriod);
         }
 
         return new Claim(Guid.NewGuid().ToString(), cover, now, name, type, damageCost);
