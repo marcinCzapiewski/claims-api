@@ -1,5 +1,4 @@
-﻿using Auditing.Persistance;
-using Auditing.Persistance.Dtos;
+﻿using Auditing.Application.Dtos;
 using Claims.Domain;
 
 namespace Auditing.Application;

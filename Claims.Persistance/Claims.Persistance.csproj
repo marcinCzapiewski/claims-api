@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Auditing.Application\Auditing.Application.csproj" />
+    <ProjectReference Include="..\Claims.Application\Claims.Application.csproj" />
   </ItemGroup>
 
 </Project>

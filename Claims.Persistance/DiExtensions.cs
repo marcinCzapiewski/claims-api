@@ -1,5 +1,7 @@
 ﻿using Claims.Domain;
 using Claims.Domain.Claims;
+using Claims.Persistance.Claims;
+using Claims.Persistance.Covers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

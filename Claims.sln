@@ -5,13 +5,9 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Api", "Claims.Api\Claims.Api.csproj", "{4E592F21-6569-4132-9D67-FF828F6D8DCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auditing.Persistance", "Auditing.Persistance\Auditing.Persistance.csproj", "{660EF8E6-602A-4D93-BEDC-136BC25B3BD3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auditing.Application", "Auditing.Application\Auditing.Application.csproj", "{7EA41746-3DE7-4AEF-8EF5-646B8917CAF3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Domain", "Claims.Domain\Claims.Domain.csproj", "{4522475B-660C-4F1F-AB9F-A7AD4B0169CD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Persistance", "Claims.Persistance\Claims.Persistance.csproj", "{6DA695E9-64B2-4631-96E0-C273309EEE8B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Application", "Claims.Application\Claims.Application.csproj", "{15081D89-ACA1-4EE7-AD13-CE0ABCE5D8B3}"
 EndProject
@@ -25,10 +21,6 @@ Global
 		{4E592F21-6569-4132-9D67-FF828F6D8DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E592F21-6569-4132-9D67-FF828F6D8DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E592F21-6569-4132-9D67-FF828F6D8DCB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{660EF8E6-602A-4D93-BEDC-136BC25B3BD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{660EF8E6-602A-4D93-BEDC-136BC25B3BD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{660EF8E6-602A-4D93-BEDC-136BC25B3BD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{660EF8E6-602A-4D93-BEDC-136BC25B3BD3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7EA41746-3DE7-4AEF-8EF5-646B8917CAF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7EA41746-3DE7-4AEF-8EF5-646B8917CAF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EA41746-3DE7-4AEF-8EF5-646B8917CAF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,10 +29,6 @@ Global
 		{4522475B-660C-4F1F-AB9F-A7AD4B0169CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4522475B-660C-4F1F-AB9F-A7AD4B0169CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4522475B-660C-4F1F-AB9F-A7AD4B0169CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DA695E9-64B2-4631-96E0-C273309EEE8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DA695E9-64B2-4631-96E0-C273309EEE8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DA695E9-64B2-4631-96E0-C273309EEE8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DA695E9-64B2-4631-96E0-C273309EEE8B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{15081D89-ACA1-4EE7-AD13-CE0ABCE5D8B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{15081D89-ACA1-4EE7-AD13-CE0ABCE5D8B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15081D89-ACA1-4EE7-AD13-CE0ABCE5D8B3}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,11 +1,10 @@
 using Claims.Api.Contracts.Requests;
 using Claims.Api.Covers;
-using Claims.Application.Covers.Create;
-using Claims.Application.Covers.Delete;
-using Claims.Application.Covers.Get;
-using Claims.Domain.Covers;
+using Claims.Application.Covers.Commands;
+using Claims.Application.Covers.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Contracts;
 
 namespace Claims.Controllers;
 
@@ -19,7 +18,7 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     [HttpPost("compute")]
     public ActionResult ComputePremium(DateTime startDate, DateTime endDate, Api.Contracts.CoverType coverType)
     {
-        var calculatedPremium = Cover.ComputePremium(startDate, endDate, (CoverType)coverType);
+        var calculatedPremium = Domain.Covers.Cover.ComputePremium(startDate, endDate, (Domain.Covers.CoverType)coverType);
 
         return Ok(calculatedPremium);
     }
@@ -29,10 +28,7 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     {
         var results = await _sender.Send(new GetCoversQuery());
 
-        var result = results.ToCoverApiContracts();
-
-
-        return Ok(results);
+        return Ok(results.ToCoverApiContracts());
     }
 
     [HttpGet("{id}")]
@@ -49,24 +45,34 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateAsync(CreateCoverRequest request)
+    public async Task<ActionResult<Api.Contracts.Cover>> CreateAsync(CreateCoverRequest request)
     {
         var cover = await _sender.Send(new CreateCoverCommand
         {
             StartDate = request.StartDate,
             EndDate = request.EndDate,
-            Type = (CoverType)request.Type,
+            Type = (Application.Covers.CoverType)request.Type,
             HttpRequestType = HttpContext.Request.Method
         });
 
-        var locationUri = Url.Link("covers", new { id = cover.Id });
-        return Created(locationUri, cover.ToCoverApiContract());
+        if (cover.IsFailure)
+        {
+            return Problem(title: cover.Error.Code, detail: cover.Error.Message, statusCode: StatusCodes.Status400BadRequest);
+        }
+
+        var locationUri = Url.Link("covers", new { id = cover.Value.Id });
+        return Created(locationUri, cover.Value.ToCoverApiContract());
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(string id)
     {
-        await _sender.Send(new DeleteCoverCommand { CoverId = id, HttpRequestType = HttpContext.Request.Method });
+        var result = await _sender.Send(new DeleteCoverCommand { CoverId = id, HttpRequestType = HttpContext.Request.Method });
+
+        if (result.IsFailure)
+        {
+            return Problem(title: result.Error.Code, detail: result.Error.Message, statusCode: StatusCodes.Status400BadRequest);
+        }
 
         return NoContent();
     }

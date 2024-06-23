@@ -1,4 +1,6 @@
-﻿namespace Claims.Domain.Covers;
+﻿using Claims.Domain.Shared;
+
+namespace Claims.Domain.Covers;
 
 public class Cover
 {
@@ -20,8 +22,23 @@ public class Cover
         Premium = premium;
     }
 
-    public static Cover New(DateTime startDate, DateTime endDate, CoverType type)
+    public static Result<Cover> New(DateTime startDate, DateTime endDate, CoverType type)
     {
+        if (startDate < DateTime.UtcNow)
+        {
+            return Result.Failure<Cover>(new DomainError("Cover.Creating.StartDate", "Cover's start date cannot be in the past"));
+        }
+
+        if (startDate > endDate)
+        {
+            return Result.Failure<Cover>(new DomainError("Cover.Creating.StartDate", "Cover's start date cannot be later than end date"));
+        }
+
+        if ((endDate - startDate).Days > 365)
+        {
+            return Result.Failure<Cover>(new DomainError("Cover.Creating.InsurancePeriod", "Insurance period cannot exceed 1 year"));
+        }
+
         return new Cover(Guid.NewGuid().ToString(), startDate, endDate, type, ComputePremium(startDate, endDate, type));
     }
 

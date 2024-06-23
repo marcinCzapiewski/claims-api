@@ -1,5 +1,5 @@
-﻿using Auditing.Persistance;
-using Claims.Domain;
+﻿using Claims.Domain;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +8,7 @@ public static class DiExtensions
 {
     public static IServiceCollection AddAuditing(this IServiceCollection services, IConfiguration configuration)
     {
-        services.RegisterPersistance(configuration);
+        services.AddDbContext<AuditContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         services.AddTransient<IAuditer, Auditer>();
 
         return services;

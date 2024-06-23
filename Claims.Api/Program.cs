@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
 using Auditing.Application;
-using Auditing.Persistance;
 using Claims.Application;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,30 +1,48 @@
-﻿namespace Claims.Domain.Claims;
+﻿using Claims.Domain.Covers;
+using Claims.Domain.Shared;
+
+namespace Claims.Domain.Claims;
 public class Claim
 {
+    public const decimal MaximumDamageCost = 100_000m;
+
     public string Id { get; private set; }
-    public string CoverId { get; private set; }
+    public Cover Cover { get; private set; }
     public DateTime Created { get; private set; }
     public string Name { get; private set; }
     public ClaimType Type { get; private set; }
     public decimal DamageCost { get; private set; }
 
-    private Claim(string id, string coverId, DateTime created, string name, ClaimType type, decimal damageCost)
+    private Claim(string id, Cover cover, DateTime created, string name, ClaimType type, decimal damageCost)
     {
         Id = id;
-        CoverId = coverId;
+        Cover = cover;
         Created = created;
         Name = name;
         Type = type;
         DamageCost = damageCost;
     }
 
-    public static Claim New(string coverId, string name, ClaimType type, decimal damageCost)
+    public static Result<Claim> New(Cover cover, string name, ClaimType type, decimal damageCost)
     {
-        return new Claim(Guid.NewGuid().ToString(), coverId, DateTime.UtcNow, name, type, damageCost);
+        if (damageCost > MaximumDamageCost)
+        {
+            return Result.Failure<Claim>(new DomainError("Claim.Creating.DamageCost", $"Claim damage cost cannot exceed maximum value of {MaximumDamageCost}"));
+        }
+
+        var now = DateTime.UtcNow;
+        if (NowIsNotWithinRelatedCoverPeriod(cover, now))
+        {
+            return Result.Failure<Claim>(new DomainError("Claim.Creating", $"Claim cannot be created outside related cover period."));
+        }
+
+        return new Claim(Guid.NewGuid().ToString(), cover, now, name, type, damageCost);
     }
 
-    public static Claim LoadFromDatabase(string id, string coverId, DateTime created, string name, ClaimType type, decimal damageCost)
+    public static Claim LoadFromDatabase(string id, Cover cover, DateTime created, string name, ClaimType type, decimal damageCost)
     {
-        return new Claim(id, coverId, created, name, type, damageCost);
+        return new Claim(id, cover, created, name, type, damageCost);
     }
+
+    private static bool NowIsNotWithinRelatedCoverPeriod(Cover cover, DateTime now) => now < cover.StartDate || now > cover.EndDate;
 }
