@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Claims.Infrastructure.Dtos;
+namespace Claims.Persistance.Dtos;
 public class ClaimDto
 {
     [BsonId]

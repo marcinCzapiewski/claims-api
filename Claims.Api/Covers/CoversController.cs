@@ -29,7 +29,10 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     {
         var results = await _sender.Send(new GetCoversQuery());
 
-        return Ok(results.ToCoverApiContracts());
+        var result = results.ToCoverApiContracts();
+
+
+        return Ok(results);
     }
 
     [HttpGet("{id}")]

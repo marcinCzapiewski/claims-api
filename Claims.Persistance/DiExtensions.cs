@@ -1,15 +1,14 @@
 ﻿using Claims.Domain;
 using Claims.Domain.Claims;
-using Claims.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
-namespace Claims.Infrastructure;
+namespace Claims.Persistance;
 public static class DiExtensions
 {
-    public static IServiceCollection RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection RegisterPersistance(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ClaimsContext>(
             options =>

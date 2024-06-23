@@ -1,8 +1,8 @@
-﻿using Claims.Infrastructure.Dtos;
+﻿using Claims.Persistance.Dtos;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.EntityFrameworkCore.Extensions;
 
-namespace Claims.Infrastructure;
+namespace Claims.Persistance;
 internal class ClaimsContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<ClaimDto> Claims { get; init; }

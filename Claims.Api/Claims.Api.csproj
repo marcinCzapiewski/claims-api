@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Auditing.Persistance\Auditing.Persistance.csproj" />
+    <ProjectReference Include="..\Auditing.Application\Auditing.Application.csproj" />
     <ProjectReference Include="..\Claims.Application\Claims.Application.csproj" />
   </ItemGroup>
 

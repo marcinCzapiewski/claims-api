@@ -1,19 +1,20 @@
 using System.Text.Json.Serialization;
+using Auditing.Application;
 using Auditing.Persistance;
+using Claims.Application;
 using Microsoft.EntityFrameworkCore;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
+    .AddAuditing(builder.Configuration)
+    .AddApplication(builder.Configuration)
     .AddControllers()
     .AddJsonOptions(x =>
     {
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
-
-// TODO plugin infrastructure
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

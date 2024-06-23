@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Auditing.Application;
 public static class DiExtensions
 {
-    public static IServiceCollection RegisterAuditing(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddAuditing(this IServiceCollection services, IConfiguration configuration)
     {
-        services.RegisterInfrastructure(configuration);
+        services.RegisterPersistance(configuration);
         services.AddTransient<IAuditer, Auditer>();
 
         return services;

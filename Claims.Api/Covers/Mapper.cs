@@ -12,6 +12,6 @@ internal static class Mapper
     };
 
     public static IEnumerable<Contracts.Cover> ToCoverApiContracts(this IEnumerable<Domain.Covers.Cover> covers) =>
-        covers.Select(ToCoverApiContract);
+        covers.Select(x => x.ToCoverApiContract());
 
 }

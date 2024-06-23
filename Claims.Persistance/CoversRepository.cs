@@ -1,9 +1,9 @@
 ﻿using Claims.Domain;
 using Claims.Domain.Covers;
-using Claims.Infrastructure.Dtos;
+using Claims.Persistance.Dtos;
 using Microsoft.EntityFrameworkCore;
 
-namespace Claims.Infrastructure;
+namespace Claims.Persistance;
 internal class CoversRepository(ClaimsContext claimsContext) : ICoversRepository
 {
     private readonly ClaimsContext _context = claimsContext;
@@ -47,8 +47,9 @@ internal class CoversRepository(ClaimsContext claimsContext) : ICoversRepository
     {
         return (await _context.Covers
             .AsNoTracking()
-            .Select(x => Cover.LoadFromDatabase(x.Id, x.StartDate, x.EndDate, (Domain.Covers.CoverType)x.Type, x.Premium))
             .ToListAsync())
+            .Select(x => Cover.LoadFromDatabase(x.Id, x.StartDate, x.EndDate, (Domain.Covers.CoverType)x.Type, x.Premium))
+            .ToList()
             .AsReadOnly();
     }
 

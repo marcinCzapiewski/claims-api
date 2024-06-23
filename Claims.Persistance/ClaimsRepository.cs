@@ -1,6 +1,6 @@
 ﻿using Claims.Domain.Claims;
-using Claims.Infrastructure;
-using Claims.Infrastructure.Dtos;
+using Claims.Persistance;
+using Claims.Persistance.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Persistance;
@@ -16,7 +16,7 @@ internal class ClaimsRepository(ClaimsContext context) : IClaimsRepository
             CoverId = claim.CoverId,
             Created = claim.Created,
             Name = claim.Name,
-            Type = (Infrastructure.Dtos.ClaimType)claim.Type,
+            Type = (Persistance.Dtos.ClaimType)claim.Type,
             DamageCost = claim.DamageCost
         };
 
@@ -29,9 +29,9 @@ internal class ClaimsRepository(ClaimsContext context) : IClaimsRepository
     {
         return (await _context.Claims
             .AsNoTracking()
-            .Select(x => Claim.LoadFromDatabase(x.Id, x.CoverId, x.Created, x.Name, (Domain.Claims.ClaimType)x.Type, x.DamageCost))
             .ToListAsync())
-            .AsReadOnly();
+            .Select(x => Claim.LoadFromDatabase(x.Id, x.CoverId, x.Created, x.Name, (Domain.Claims.ClaimType)x.Type, x.DamageCost))
+            .ToList();
     }
 
     public async Task<Claim?> GetClaim(string claimId)
