@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Domain", "Claims.Dom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Application", "Claims.Application\Claims.Application.csproj", "{15081D89-ACA1-4EE7-AD13-CE0ABCE5D8B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Events", "Claims.Events\Claims.Events.csproj", "{53DD5F18-45E3-4045-8D0E-0713A47D9FEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auditing.Worker", "Auditing.Worker\Auditing.Worker.csproj", "{14F3A771-5FEE-4D1F-9B74-4A19D1672139}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{15081D89-ACA1-4EE7-AD13-CE0ABCE5D8B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15081D89-ACA1-4EE7-AD13-CE0ABCE5D8B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15081D89-ACA1-4EE7-AD13-CE0ABCE5D8B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53DD5F18-45E3-4045-8D0E-0713A47D9FEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53DD5F18-45E3-4045-8D0E-0713A47D9FEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53DD5F18-45E3-4045-8D0E-0713A47D9FEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53DD5F18-45E3-4045-8D0E-0713A47D9FEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14F3A771-5FEE-4D1F-9B74-4A19D1672139}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14F3A771-5FEE-4D1F-9B74-4A19D1672139}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14F3A771-5FEE-4D1F-9B74-4A19D1672139}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14F3A771-5FEE-4D1F-9B74-4A19D1672139}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

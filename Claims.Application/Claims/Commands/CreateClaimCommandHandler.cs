@@ -1,12 +1,13 @@
 ﻿using Claims.Application.Covers;
-using Claims.Domain;
 using Claims.Domain.Claims;
 using Claims.Domain.Shared;
+using Claims.Events;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Application.Claims.Commands;
-internal sealed class CreateClaimCommandHandler(ClaimsContext claimsContext, IAuditer auditer) : IRequestHandler<CreateClaimCommand, Result<Claim>>
+internal sealed class CreateClaimCommandHandler(ClaimsContext claimsContext, IPublishEndpoint publishEndpoint) : IRequestHandler<CreateClaimCommand, Result<Claim>>
 {
     public async Task<Result<Claim>> Handle(CreateClaimCommand request, CancellationToken cancellationToken)
     {
@@ -36,7 +37,9 @@ internal sealed class CreateClaimCommandHandler(ClaimsContext claimsContext, IAu
         claimsContext.Claims.Add(claim.Value.ToDatabaseModel());
         await claimsContext.SaveChangesAsync(cancellationToken);
 
-        auditer.AuditClaim(claim.Value.Id, request.HttpRequestType);
+        await publishEndpoint.Publish(
+            new ClaimCreatedEvent { ClaimId = claim.Value.Id, HttpRequestType = request.HttpRequestType },
+            cancellationToken);
 
         return claim;
     }

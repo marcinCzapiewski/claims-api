@@ -1,13 +1,12 @@
 ﻿using Auditing.Application.Dtos;
-using Claims.Domain;
 
 namespace Auditing.Application;
 
-internal class Auditer(AuditContext auditContext) : IAuditer
+internal class AuditService(AuditContext auditContext)
 {
     private readonly AuditContext _auditContext = auditContext;
 
-    public void AuditClaim(string id, string httpRequestType)
+    public async Task AuditClaim(string id, string httpRequestType)
     {
         var claimAudit = new ClaimAuditDto()
         {
@@ -17,10 +16,10 @@ internal class Auditer(AuditContext auditContext) : IAuditer
         };
 
         _auditContext.Add(claimAudit);
-        _auditContext.SaveChanges();
+        await _auditContext.SaveChangesAsync();
     }
 
-    public void AuditCover(string id, string httpRequestType)
+    public async Task AuditCover(string id, string httpRequestType)
     {
         var coverAudit = new CoverAuditDto()
         {
@@ -30,6 +29,6 @@ internal class Auditer(AuditContext auditContext) : IAuditer
         };
 
         _auditContext.Add(coverAudit);
-        _auditContext.SaveChanges();
+        await _auditContext.SaveChangesAsync();
     }
 }

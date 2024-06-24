@@ -1,10 +1,11 @@
-﻿using Claims.Domain;
-using Claims.Domain.Shared;
+﻿using Claims.Domain.Shared;
+using Claims.Events;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Application.Claims.Commands;
-internal sealed class DeleteClaimCommandHandler(ClaimsContext claimsContext, IAuditer auditer) : IRequestHandler<DeleteClaimCommand, Result>
+internal sealed class DeleteClaimCommandHandler(ClaimsContext claimsContext, IPublishEndpoint publishEndpoint) : IRequestHandler<DeleteClaimCommand, Result>
 {
     public async Task<Result> Handle(DeleteClaimCommand request, CancellationToken cancellationToken)
     {
@@ -18,7 +19,7 @@ internal sealed class DeleteClaimCommandHandler(ClaimsContext claimsContext, IAu
             await claimsContext.SaveChangesAsync(cancellationToken);
         }
 
-        auditer.AuditClaim(request.ClaimId, request.HttpRequestType);
+        await publishEndpoint.Publish(new ClaimDeletedEvent { ClaimId = request.ClaimId, HttpRequestType = request.HttpRequestType }, cancellationToken);
 
         return Result.Success();
     }

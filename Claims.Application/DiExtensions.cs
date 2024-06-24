@@ -1,4 +1,5 @@
-﻿using MediatR.NotificationPublishers;
+﻿using MassTransit;
+using MediatR.NotificationPublishers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,22 @@ public static class DiExtensions
                 options.UseMongoDB(database.Client, database.DatabaseNamespace.DatabaseName);
             }
         );
+
+        services.AddMassTransit(config =>
+        {
+            config.SetKebabCaseEndpointNameFormatter();
+
+            config.UsingRabbitMq((context, configurator) =>
+            {
+                configurator.Host(new Uri(configuration["MessageBroker:Host"]!), h =>
+                {
+                    h.Username(configuration["MessageBroker:Username"]!);
+                    h.Password(configuration["MessageBroker.Password"]!);
+                });
+
+                configurator.ConfigureEndpoints(context);
+            });
+        });
 
         return services;
     }

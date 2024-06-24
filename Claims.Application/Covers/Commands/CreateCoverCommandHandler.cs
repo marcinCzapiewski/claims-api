@@ -1,10 +1,11 @@
-﻿using Claims.Domain;
-using Claims.Domain.Covers;
+﻿using Claims.Domain.Covers;
 using Claims.Domain.Shared;
+using Claims.Events;
+using MassTransit;
 using MediatR;
 
 namespace Claims.Application.Covers.Commands;
-internal sealed class CreateCoverCommandHandler(ClaimsContext claimsContext, IAuditer auditer) : IRequestHandler<CreateCoverCommand, Result<Cover>>
+internal sealed class CreateCoverCommandHandler(ClaimsContext claimsContext, IPublishEndpoint publishEndpoint) : IRequestHandler<CreateCoverCommand, Result<Cover>>
 {
     public async Task<Result<Cover>> Handle(CreateCoverCommand request, CancellationToken cancellationToken)
     {
@@ -18,7 +19,10 @@ internal sealed class CreateCoverCommandHandler(ClaimsContext claimsContext, IAu
         // NOTE: should create and audit be transactional?
         claimsContext.Covers.Add(cover.Value.ToDatabaseModel());
         await claimsContext.SaveChangesAsync(cancellationToken);
-        auditer.AuditCover(cover.Value.Id.ToString(), request.HttpRequestType);
+
+        await publishEndpoint.Publish(
+            new CoverCreatedEvent { CoverId = cover.Value.Id, HttpRequestType = request.HttpRequestType },
+            cancellationToken);
 
         return cover;
     }

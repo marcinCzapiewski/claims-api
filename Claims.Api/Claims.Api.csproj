@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Auditing.Application\Auditing.Application.csproj" />
     <ProjectReference Include="..\Claims.Application\Claims.Application.csproj" />
+    <ProjectReference Include="..\Claims.Events\Claims.Events.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,11 @@
-﻿using Claims.Domain;
-using Claims.Domain.Shared;
+﻿using Claims.Domain.Shared;
+using Claims.Events;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Application.Covers.Commands;
-internal sealed class DeleteCoverCommandHandler(ClaimsContext claimsContext, IAuditer auditer) : IRequestHandler<DeleteCoverCommand, Result>
+internal sealed class DeleteCoverCommandHandler(ClaimsContext claimsContext, IPublishEndpoint publishEndpoint) : IRequestHandler<DeleteCoverCommand, Result>
 {
     public async Task<Result> Handle(DeleteCoverCommand request, CancellationToken cancellationToken)
     {
@@ -15,8 +16,9 @@ internal sealed class DeleteCoverCommandHandler(ClaimsContext claimsContext, IAu
             claimsContext.Covers.Remove(coverDto);
             await claimsContext.SaveChangesAsync(cancellationToken);
         }
-
-        auditer.AuditCover(request.CoverId, request.HttpRequestType);
+        await publishEndpoint.Publish(
+            new CoverDeletedEvent { CoverId = request.CoverId, HttpRequestType = request.HttpRequestType },
+            cancellationToken);
 
         return Result.Success();
     }

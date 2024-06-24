@@ -1,13 +1,10 @@
 using System.Text.Json.Serialization;
-using Auditing.Application;
 using Claims.Application;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
-    .AddAuditing(builder.Configuration)
     .AddApplication(builder.Configuration)
     .AddControllers()
     .AddJsonOptions(x =>
@@ -33,12 +30,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AuditContext>();
-    context.Database.Migrate();
-}
 
 app.Run();
 
