@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8DEBADBF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Domain.Tests", "Claims.Domain.Tests\Claims.Domain.Tests.csproj", "{DED29D21-B3EF-40B7-878D-5515E0FD0DE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Api.Tests", "Claims.Api.Tests\Claims.Api.Tests.csproj", "{C2E9F8F6-838B-4832-A1DC-5B9049F78A1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Integration.Tests", "Claims.Integration.Tests\Claims.Integration.Tests.csproj", "{C2E9F8F6-838B-4832-A1DC-5B9049F78A1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
