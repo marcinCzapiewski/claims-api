@@ -10,11 +10,8 @@ namespace Claims.Api.Covers;
 
 [ApiController]
 [Route("[controller]")]
-public class CoversController(ILogger<CoversController> logger, ISender sender) : ControllerBase
+public class CoversController(ISender sender) : ControllerBase
 {
-    private readonly ILogger<CoversController> _logger = logger;
-    private readonly ISender _sender = sender;
-
     [HttpPost("compute")]
     public ActionResult ComputePremium(DateTime startDate, DateTime endDate, CoverType coverType)
     {
@@ -26,7 +23,7 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CoverReadModel>>> GetAsync()
     {
-        var results = await _sender.Send(new GetCoversQuery());
+        var results = await sender.Send(new GetCoversQuery());
 
         return Ok(results);
     }
@@ -34,7 +31,7 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     [HttpGet("{id}")]
     public async Task<ActionResult<CoverReadModel>> GetAsync(string id)
     {
-        var cover = await _sender.Send(new GetCoverQuery(id));
+        var cover = await sender.Send(new GetCoverQuery(id));
 
         if (cover is null)
         {
@@ -47,7 +44,7 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     [HttpPost]
     public async Task<ActionResult<CoverReadModel>> CreateAsync(CreateCoverRequest request)
     {
-        var cover = await _sender.Send(new CreateCoverCommand
+        var cover = await sender.Send(new CreateCoverCommand
         {
             StartDate = request.StartDate,
             EndDate = request.EndDate,
@@ -67,7 +64,7 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync(string id)
     {
-        var result = await _sender.Send(new DeleteCoverCommand { CoverId = id, HttpRequestType = HttpContext.Request.Method });
+        var result = await sender.Send(new DeleteCoverCommand { CoverId = id, HttpRequestType = HttpContext.Request.Method });
 
         if (result.IsFailure)
         {

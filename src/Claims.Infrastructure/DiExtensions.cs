@@ -25,22 +25,6 @@ public static class DiExtensions
         services.AddTransient<ICoversRepository, CoversRepository>();
         services.AddTransient<IClaimsRepository, ClaimsRepository>();
 
-        //services.AddMassTransit(config =>
-        //{
-        //    config.SetKebabCaseEndpointNameFormatter();
-
-        //    config.UsingRabbitMq((context, configurator) =>
-        //    {
-        //        configurator.Host(new Uri(configuration["MessageBroker:Host"]!), h =>
-        //        {
-        //            h.Username(configuration["MessageBroker:Username"]!);
-        //            h.Password(configuration["MessageBroker.Password"]!);
-        //        });
-
-        //        configurator.ConfigureEndpoints(context);
-        //    });
-        //});
-
         return services;
     }
 }

@@ -9,9 +9,8 @@ namespace Claims.Api.Claims;
 
 [ApiController]
 [Route("[controller]")]
-public class ClaimsController(ILogger<ClaimsController> logger, ISender sender) : ControllerBase
+public class ClaimsController(ISender sender) : ControllerBase
 {
-    private readonly ILogger<ClaimsController> _logger = logger;
     private readonly ISender _sender = sender;
 
     [HttpGet]
