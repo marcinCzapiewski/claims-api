@@ -10,7 +10,7 @@ internal class AuditService(AuditContext auditContext)
     {
         var claimAudit = new ClaimAuditDto()
         {
-            Created = DateTime.Now,
+            Created = DateTime.UtcNow,
             HttpRequestType = httpRequestType,
             ClaimId = id
         };
@@ -23,7 +23,7 @@ internal class AuditService(AuditContext auditContext)
     {
         var coverAudit = new CoverAuditDto()
         {
-            Created = DateTime.Now,
+            Created = DateTime.UtcNow,
             HttpRequestType = httpRequestType,
             CoverId = id
         };
