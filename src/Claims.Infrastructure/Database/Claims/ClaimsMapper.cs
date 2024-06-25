@@ -1,8 +1,8 @@
-﻿using Claims.Application.Claims;
-using Claims.Application.Covers;
-using Claims.Domain.Claims;
+﻿using Claims.Domain.Claims;
+using Claims.Infrastructure.Database.Claims;
+using Claims.Infrastructure.Database.Covers;
 
-namespace Claims.Application.Claims;
+namespace Claims.Infrastructure.Database.Claims;
 internal static class ClaimsMapper
 {
     public static Claim ToDomainModel(this ClaimDto claimDto, CoverDto coverDto)
@@ -15,6 +15,16 @@ internal static class ClaimsMapper
             (Domain.Claims.ClaimType)claimDto.Type,
             claimDto.DamageCost);
     }
+
+    public static ClaimReadModel ToReadModel(this ClaimDto claimDto) => new()
+    {
+        Id = claimDto.Id,
+        CoverId = claimDto.CoverId,
+        Created = claimDto.Created,
+        Name = claimDto.Name,
+        Type = (Domain.Claims.ClaimType)claimDto.Type,
+        DamageCost = claimDto.DamageCost
+    };
 
     public static ClaimDto ToDatabaseModel(this Claim claim) => new()
     {

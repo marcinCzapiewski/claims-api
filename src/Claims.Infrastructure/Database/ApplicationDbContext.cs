@@ -1,10 +1,10 @@
-﻿using Claims.Application.Claims;
-using Claims.Application.Covers;
+﻿using Claims.Infrastructure.Database.Claims;
+using Claims.Infrastructure.Database.Covers;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.EntityFrameworkCore.Extensions;
 
-namespace Claims.Application;
-internal class ClaimsContext(DbContextOptions options) : DbContext(options)
+namespace Claims.Infrastructure.Database;
+internal class ApplicationDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<ClaimDto> Claims { get; init; }
     public DbSet<CoverDto> Covers { get; init; }

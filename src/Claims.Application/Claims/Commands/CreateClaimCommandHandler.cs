@@ -1,19 +1,20 @@
-﻿using Claims.Application.Covers;
-using Claims.Domain.Claims;
+﻿using Claims.Domain.Claims;
+using Claims.Domain.Covers;
 using Claims.Domain.Shared;
 using Claims.Events;
 using MassTransit;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Application.Claims.Commands;
-internal sealed class CreateClaimCommandHandler(ClaimsContext claimsContext, IPublishEndpoint publishEndpoint) : IRequestHandler<CreateClaimCommand, Result<Claim>>
+internal sealed class CreateClaimCommandHandler(
+    IClaimsRepository claimsRepository,
+    ICoversRepository coversRepository,
+    IPublishEndpoint publishEndpoint)
+        : IRequestHandler<CreateClaimCommand, Result<Claim>>
 {
     public async Task<Result<Claim>> Handle(CreateClaimCommand request, CancellationToken cancellationToken)
     {
-        var relatedCover = await claimsContext.Covers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.CoverId, cancellationToken);
+        var relatedCover = await coversRepository.GetCover(request.CoverId);
 
         if (relatedCover == null)
         {
@@ -23,9 +24,9 @@ internal sealed class CreateClaimCommandHandler(ClaimsContext claimsContext, IPu
         }
 
         var claim = Claim.New(
-            relatedCover.ToDomainModel(),
+            relatedCover,
             request.Name,
-            (Domain.Claims.ClaimType)request.ClaimType,
+            request.ClaimType,
             request.DamageCost);
 
         if (claim.IsFailure)
@@ -34,8 +35,7 @@ internal sealed class CreateClaimCommandHandler(ClaimsContext claimsContext, IPu
         }
 
         // NOTE: should create and audit be transactional?
-        claimsContext.Claims.Add(claim.Value.ToDatabaseModel());
-        await claimsContext.SaveChangesAsync(cancellationToken);
+        await claimsRepository.AddClaim(claim.Value);
 
         await publishEndpoint.Publish(
             new ClaimCreatedEvent { ClaimId = claim.Value.Id, HttpRequestType = request.HttpRequestType },

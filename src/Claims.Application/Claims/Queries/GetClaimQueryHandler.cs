@@ -1,13 +1,11 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Claims.Domain.Claims;
+using MediatR;
 
 namespace Claims.Application.Claims.Queries;
-internal sealed class GetClaimQueryHandler(ClaimsContext claimsContext) : IRequestHandler<GetClaimQuery, ClaimDto?>
+internal sealed class GetClaimQueryHandler(IClaimsRepository claimsRepository) : IRequestHandler<GetClaimQuery, ClaimReadModel?>
 {
-    public Task<ClaimDto?> Handle(GetClaimQuery request, CancellationToken cancellationToken)
+    public Task<ClaimReadModel?> Handle(GetClaimQuery request, CancellationToken cancellationToken)
     {
-        return claimsContext.Claims
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.ClaimId, cancellationToken);
+        return claimsRepository.GetClaim(request.ClaimId);
     }
 }

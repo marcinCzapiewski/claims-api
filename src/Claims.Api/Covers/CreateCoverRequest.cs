@@ -1,4 +1,6 @@
-﻿namespace Claims.Api.Contracts.Requests;
+﻿using Claims.Domain.Covers;
+
+namespace Claims.Api.Covers;
 
 public record CreateCoverRequest
 {

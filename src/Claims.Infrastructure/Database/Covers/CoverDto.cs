@@ -1,10 +1,10 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Claims.Application.Covers;
+namespace Claims.Infrastructure.Database.Covers;
 public class CoverDto
 {
     [BsonId]
-    public string Id { get; set; }
+    public required string Id { get; set; }
 
     [BsonElement("startDate")]
     [BsonDateTimeOptions(DateOnly = true)]

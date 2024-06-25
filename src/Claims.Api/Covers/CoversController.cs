@@ -1,12 +1,12 @@
-using Claims.Api.Contracts.Requests;
-using Claims.Api.Covers;
 using Claims.Application.Covers.Commands;
 using Claims.Application.Covers.Queries;
+using Claims.Domain.Covers;
+using Claims.Application.Covers;
 using Claims.Domain.Covers.Premium;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Claims.Controllers;
+namespace Claims.Api.Covers;
 
 [ApiController]
 [Route("[controller]")]
@@ -16,23 +16,23 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     private readonly ISender _sender = sender;
 
     [HttpPost("compute")]
-    public ActionResult ComputePremium(DateTime startDate, DateTime endDate, Api.Contracts.CoverType coverType)
+    public ActionResult ComputePremium(DateTime startDate, DateTime endDate, CoverType coverType)
     {
-        var calculatedPremium = new CoverPremium(startDate, endDate, (Domain.Covers.CoverType)coverType);
+        var calculatedPremium = new CoverPremium(startDate, endDate, coverType);
 
         return Ok(calculatedPremium.Value);
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Api.Contracts.Cover>>> GetAsync()
+    public async Task<ActionResult<IEnumerable<CoverReadModel>>> GetAsync()
     {
         var results = await _sender.Send(new GetCoversQuery());
 
-        return Ok(results.ToCoverApiContracts());
+        return Ok(results);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Api.Contracts.Cover>> GetAsync(string id)
+    public async Task<ActionResult<CoverReadModel>> GetAsync(string id)
     {
         var cover = await _sender.Send(new GetCoverQuery(id));
 
@@ -41,17 +41,17 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
             return NotFound();
         }
 
-        return Ok(cover.ToCoverApiContract());
+        return Ok(cover);
     }
 
     [HttpPost]
-    public async Task<ActionResult<Api.Contracts.Cover>> CreateAsync(CreateCoverRequest request)
+    public async Task<ActionResult<CoverReadModel>> CreateAsync(CreateCoverRequest request)
     {
         var cover = await _sender.Send(new CreateCoverCommand
         {
             StartDate = request.StartDate,
             EndDate = request.EndDate,
-            Type = (Application.Covers.CoverType)request.Type,
+            Type = request.Type,
             HttpRequestType = HttpContext.Request.Method
         });
 
@@ -61,7 +61,7 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
         }
 
         var locationUri = Url.Link("covers", new { id = cover.Value.Id });
-        return Created(locationUri, cover.Value.ToCoverApiContract());
+        return Created(locationUri, cover.Value.ToReadModel());
     }
 
     [HttpDelete("{id}")]

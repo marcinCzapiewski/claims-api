@@ -1,13 +1,11 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Claims.Domain.Covers;
+using MediatR;
 
 namespace Claims.Application.Covers.Queries;
-internal sealed class GetCoverQueryHandler(ClaimsContext claimsContext) : IRequestHandler<GetCoverQuery, CoverDto?>
+internal sealed class GetCoverQueryHandler(ICoversRepository coversRepository) : IRequestHandler<GetCoverQuery, CoverReadModel?>
 {
-    public Task<CoverDto?> Handle(GetCoverQuery request, CancellationToken cancellationToken)
+    public Task<CoverReadModel?> Handle(GetCoverQuery request, CancellationToken cancellationToken)
     {
-        return claimsContext.Covers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.CoverId, cancellationToken);
+        return coversRepository.GetCoverReadModel(request.CoverId);
     }
 }
