@@ -1,17 +1,21 @@
-﻿using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
+﻿using DotNet.Testcontainers.Containers;
+using Testcontainers.MongoDb;
 
 namespace Claims.Api.Tests;
 public class MongoFixture : IAsyncLifetime
 {
-    private IContainer mongoContainer = new ContainerBuilder()
+    private readonly MongoDbContainer mongoContainer = new MongoDbBuilder()
             .WithImage("mongo:latest")
-            .WithPortBinding(27018)
-    .Build();
+            .Build();
 
     public string Host => mongoContainer.Hostname;
+    public string ConnectionString => mongoContainer.GetConnectionString();
+    public string ContainerId => $"{mongoContainer.Id}";
 
-    public Task InitializeAsync() => mongoContainer.StartAsync();
+    public Task InitializeAsync()
+    {
+        return mongoContainer.StartAsync();
+    }
 
     public Task DisposeAsync() => mongoContainer.DisposeAsync().AsTask();
 }
