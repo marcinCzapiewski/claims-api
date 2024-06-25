@@ -16,7 +16,7 @@ public class CoverPremiumTests
     [InlineData(CoverType.Yacht, 30, 1375 * 30)]
     [InlineData(CoverType.PassengerShip, 30, 1500 * 30)]
     [InlineData(CoverType.Tanker, 30, 1875 * 30)]
-    public void Cover_ComputePremium_ForCoverShorterOrEqualTo30Days_Should_CalculatePremiumBasedOnPeriodLengthAndType(CoverType coverType, int coverDays, decimal expectedPremium)
+    public void CoverPremium_ForCoverShorterOrEqualTo30Days_Should_BaseOnPeriodLengthAndType(CoverType coverType, int coverDays, decimal expectedPremium)
     {
         var tomorrow = DateTime.UtcNow.AddDays(1);
         var startDate = tomorrow;
@@ -38,7 +38,7 @@ public class CoverPremiumTests
     [InlineData(CoverType.ContainerShip, 180, 30 * 1625 + 150 * (1625 * 0.98))]
     [InlineData(CoverType.PassengerShip, 180, 30 * 1500 + 150 * (1500 * 0.98))]
     [InlineData(CoverType.Tanker, 180, 30 * 1875 + 150 * (1875 * 0.98))]
-    public void Cover_ComputePremium_ForCoverLongerThan30DaysAndShorterOrEqual180ThanDays_Should_CalculatePremiumBasedOnPeriodLengthAndType_AndApplyDiscountAfter30Days(CoverType coverType, int coverDays, decimal expectedPremium)
+    public void CoverPremium_ForCoverLongerThan30DaysAndShorterOrEqual180ThanDays_Should_BeCalculatedBasedOnPeriodLengthAndType_AndApplyDiscountAfter30Days(CoverType coverType, int coverDays, decimal expectedPremium)
     {
         var tomorrow = DateTime.UtcNow.AddDays(1);
         var startDate = tomorrow;
@@ -55,7 +55,7 @@ public class CoverPremiumTests
     [InlineData(CoverType.ContainerShip, 181, 30 * 1625 + 150 * (1625 * 0.98) + 1 * (1625 * 0.98 * 0.99))]
     [InlineData(CoverType.PassengerShip, 181, 30 * 1500 + 150 * (1500 * 0.98) + 1 * (1500 * 0.98 * 0.99))]
     [InlineData(CoverType.Tanker, 181, 30 * 1875 + 150 * (1875 * 0.98) + 1 * (1875 * 0.98 * 0.99))]
-    public void Cover_ComputePremium_ForCoverLongerThan180Days_Should_CalculatePremiumBasedOnPeriodLengthAndType_AndApplyDiscountProgressively(CoverType coverType, int coverDays, decimal expectedPremium)
+    public void CoverPremium_ForCoverLongerThan180Days_Should_BeCalculatedBasedOnPeriodLengthAndType_AndApplyDiscountProgressively(CoverType coverType, int coverDays, decimal expectedPremium)
     {
         var tomorrow = DateTime.UtcNow.AddDays(1);
         var startDate = tomorrow;
