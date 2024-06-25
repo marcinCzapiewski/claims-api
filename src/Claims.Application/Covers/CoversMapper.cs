@@ -7,15 +7,14 @@ internal static class CoversMapper
             coverDto.Id,
             coverDto.StartDate,
             coverDto.EndDate,
-            (Domain.Covers.CoverType)coverDto.Type,
-            coverDto.Premium);
+            (Domain.Covers.CoverType)coverDto.Type);
 
     public static CoverDto ToDatabaseModel(this Cover cover) => new()
     {
         Id = cover.Id.ToString(),
         StartDate = cover.StartDate,
         EndDate = cover.EndDate,
-        Premium = cover.Premium,
+        Premium = cover.Premium.Value,
         Type = (CoverType)cover.Type
     };
 }

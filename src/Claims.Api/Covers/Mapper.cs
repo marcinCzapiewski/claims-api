@@ -21,7 +21,7 @@ internal static class Mapper
         Id = cover.Id,
         StartDate = cover.StartDate,
         EndDate = cover.EndDate,
-        Premium = cover.Premium,
+        Premium = cover.Premium.Value,
         Type = (Contracts.CoverType)cover.Type
     };
 }

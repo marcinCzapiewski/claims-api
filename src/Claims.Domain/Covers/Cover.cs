@@ -1,4 +1,5 @@
-﻿using Claims.Domain.Shared;
+﻿using Claims.Domain.Covers.Premium;
+using Claims.Domain.Shared;
 
 namespace Claims.Domain.Covers;
 
@@ -11,9 +12,9 @@ public class Cover
 
     public CoverType Type { get; private set; }
 
-    public decimal Premium { get; private set; }
+    public CoverPremium Premium { get; private set; }
 
-    private Cover(string id, DateTime startDate, DateTime endDate, CoverType type, decimal premium)
+    private Cover(string id, DateTime startDate, DateTime endDate, CoverType type, CoverPremium premium)
     {
         Id = id;
         StartDate = startDate;
@@ -39,76 +40,11 @@ public class Cover
             return Result.Failure<Cover>(DomainErrors.Covers.InsurancePeriodTooLong);
         }
 
-        return new Cover(Guid.NewGuid().ToString(), startDate, endDate, type, ComputePremium(startDate, endDate, type));
+        return new Cover(Guid.NewGuid().ToString(), startDate, endDate, type, new CoverPremium(startDate, endDate, type));
     }
 
-    public static Cover LoadFromDatabase(string id, DateTime startDate, DateTime endDate, CoverType type, decimal premium)
+    public static Cover LoadFromDatabase(string id, DateTime startDate, DateTime endDate, CoverType type)
     {
-        return new Cover(id, startDate, endDate, type, premium);
+        return new Cover(id, startDate, endDate, type, new CoverPremium(startDate, endDate, type));
     }
-
-    public static decimal ComputePremium(DateTime startDate, DateTime endDate, CoverType coverType)
-    {
-        var premiumPerDay = CalculatePremiumPerDay(coverType);
-
-        var insuranceLength = (endDate.Date - startDate.Date).TotalDays + 1;
-
-        var totalPremium = 0m;
-
-        for (var i = 0; i < insuranceLength; i++)
-        {
-            if (i < 30)
-            {
-                totalPremium += premiumPerDay;
-                continue;
-            }
-
-            if (i < 180)
-            {
-                if (coverType == CoverType.Yacht)
-                {
-                    totalPremium += premiumPerDay * 0.95m;
-
-                }
-                else
-                {
-                    totalPremium += premiumPerDay * 0.98m;
-                }
-
-                continue;
-            }
-
-            if (i >= 180)
-            {
-                if (coverType == CoverType.Yacht)
-                {
-                    totalPremium += premiumPerDay * 0.95m * 0.97m;
-                }
-                else
-                {
-                    totalPremium += premiumPerDay * 0.98m * 0.99m;
-                }
-            }
-
-        }
-
-        return totalPremium;
-    }
-
-    private static decimal CalculatePremiumPerDay(CoverType coverType)
-    {
-        const int baseDayRate = 1250;
-        decimal multiplier = GetCoverTypeMultiplier(coverType);
-
-        var premiumPerDay = baseDayRate * multiplier;
-        return premiumPerDay;
-    }
-
-    private static decimal GetCoverTypeMultiplier(CoverType coverType) => coverType switch
-    {
-        CoverType.Yacht => 1.1m,
-        CoverType.PassengerShip => 1.2m,
-        CoverType.Tanker => 1.5m,
-        _ => 1.3m
-    };
 }

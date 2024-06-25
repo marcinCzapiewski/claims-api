@@ -2,9 +2,9 @@ using Claims.Api.Contracts.Requests;
 using Claims.Api.Covers;
 using Claims.Application.Covers.Commands;
 using Claims.Application.Covers.Queries;
+using Claims.Domain.Covers.Premium;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics.Contracts;
 
 namespace Claims.Controllers;
 
@@ -18,9 +18,9 @@ public class CoversController(ILogger<CoversController> logger, ISender sender) 
     [HttpPost("compute")]
     public ActionResult ComputePremium(DateTime startDate, DateTime endDate, Api.Contracts.CoverType coverType)
     {
-        var calculatedPremium = Domain.Covers.Cover.ComputePremium(startDate, endDate, (Domain.Covers.CoverType)coverType);
+        var calculatedPremium = new CoverPremium(startDate, endDate, (Domain.Covers.CoverType)coverType);
 
-        return Ok(calculatedPremium);
+        return Ok(calculatedPremium.Value);
     }
 
     [HttpGet]
