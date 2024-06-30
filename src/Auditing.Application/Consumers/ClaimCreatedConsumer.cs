@@ -6,6 +6,6 @@ internal sealed class ClaimCreatedConsumer(AuditService auditService) : IConsume
 {
     public async Task Consume(ConsumeContext<ClaimCreatedEvent> context)
     {
-        await auditService.AuditCover(context.Message.ClaimId, context.Message.HttpRequestType);
+        await auditService.AuditClaim(context.Message.ClaimId, context.Message.HttpRequestType);
     }
 }

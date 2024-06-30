@@ -1,4 +1,5 @@
 ﻿using Claims.Domain.Claims;
+using Claims.Infrastructure.Database.Covers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Claims.Infrastructure.Database.Claims;
@@ -18,8 +19,9 @@ internal class ClaimsRepository(ApplicationDbContext context) : IClaimsRepositor
     {
         return (await _context.Claims
             .AsNoTracking()
-            .Select(x => x.ToReadModel())
             .ToListAsync())
+            .Select(x => x.ToReadModel())
+            .ToList()
             .AsReadOnly();
     }
 

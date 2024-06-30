@@ -6,6 +6,6 @@ internal sealed class ClaimDeletedonsumer(AuditService auditService) : IConsumer
 {
     public async Task Consume(ConsumeContext<ClaimDeletedEvent> context)
     {
-        await auditService.AuditCover(context.Message.ClaimId, context.Message.HttpRequestType);
+        await auditService.AuditClaim(context.Message.ClaimId, context.Message.HttpRequestType);
     }
 }

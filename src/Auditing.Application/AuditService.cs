@@ -15,7 +15,7 @@ internal class AuditService(AuditContext auditContext)
             ClaimId = id
         };
 
-        _auditContext.Add(claimAudit);
+        _auditContext.ClaimAudits.Add(claimAudit);
         await _auditContext.SaveChangesAsync();
     }
 
@@ -28,7 +28,7 @@ internal class AuditService(AuditContext auditContext)
             CoverId = id
         };
 
-        _auditContext.Add(coverAudit);
+        _auditContext.CoverAudits.Add(coverAudit);
         await _auditContext.SaveChangesAsync();
     }
 }
